@@ -1,0 +1,271 @@
+/* ============================================
+   COMPONENTS — Buttons, inputs, cards, nav
+   ============================================ */
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  background: transparent;
+}
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn:not(:disabled):active { transform: scale(0.97); }
+
+.btn-primary {
+  background: transparent;
+  color: var(--verde-claro);
+  border-color: var(--verde-claro);
+}
+.btn-primary:not(:disabled):hover { background: rgba(139,0,0,.12); }
+
+.btn-ouro {
+  background: transparent;
+  color: var(--rosso);
+  border-color: var(--rosso);
+  font-weight: 700;
+}
+.btn-ouro:not(:disabled):hover { background: rgba(201,168,76,.1); }
+
+.btn-outline {
+  background: transparent;
+  color: rgba(255,255,255,.7);
+  border-color: rgba(255,255,255,.2);
+}
+.btn-outline:not(:disabled):hover { border-color: rgba(255,255,255,.5); color: var(--branco); }
+
+.btn-danger { color: var(--erro); border-color: var(--erro); }
+
+.btn-lg {
+  width: 100%;
+  min-height: 52px;
+  font-size: 1.05rem;
+  border-radius: var(--radius-lg);
+}
+
+.btn-sm {
+  min-height: 36px;
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: var(--transition);
+  -webkit-tap-highlight-color: transparent;
+  color: var(--branco);
+}
+.btn-icon:not(:disabled):hover { background: rgba(255,255,255,.1); }
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--branco);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Inputs ── */
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-md);
+  color: var(--branco);
+  font-family: var(--font);
+  font-size: 1rem;
+  outline: none;
+  transition: var(--transition);
+}
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: var(--verde-claro);
+  background: rgba(255,255,255,.1);
+}
+input::placeholder { color: var(--cinza-texto); }
+
+/* ── Progress bar ── */
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,.1);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--verde-claro);
+  border-radius: var(--radius-pill);
+  transition: width 0.4s ease;
+}
+
+/* ── Badge ── */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(255,255,255,.1);
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── Alert ── */
+.alert {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+.alert-warning {
+  background: rgba(201,168,76,.12);
+  border: 1px solid rgba(201,168,76,.35);
+  color: #f0d880;
+}
+.alert-info {
+  background: rgba(139,0,0,.12);
+  border: 1px solid rgba(139,0,0,.35);
+  color: #7feabc;
+}
+
+/* ── Screen header ── */
+.screen-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-md);
+  padding-top: calc(var(--sp-md) + env(safe-area-inset-top, 0px));
+  min-height: var(--header-h);
+  flex-shrink: 0;
+}
+.screen-header h2 { flex: 1; }
+
+/* ── Bottom nav ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--escuro2);
+  border-top: 1px solid rgba(255,255,255,.07);
+  display: flex;
+  align-items: center;
+  z-index: 100;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 44px;
+  background: none;
+  border: none;
+  color: var(--cinza-texto);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  padding: 4px 0;
+}
+.nav-item.active { color: var(--verde-claro); }
+.nav-icon  { font-size: 1.25rem; line-height: 1; }
+.nav-label { font-size: 0.68rem; font-weight: 500; }
+
+.nav-badge {
+  position: absolute;
+  top: 2px;
+  right: calc(50% - 18px);
+  background: var(--rosso);
+  color: var(--branco);
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  padding: 1px 5px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* ── Wave visualizer ── */
+/* Fixed-size box — height never changes, so nothing around it jumps.
+   Bars animate with transform:scaleY (GPU compositor, zero reflow). */
+.wave-visualizer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 0 20px;
+  overflow: hidden;
+}
+.wave-visualizer.playing {
+  border-color: rgba(139,0,0,0.4);
+  background: rgba(139,0,0,0.07);
+}
+.wave-visualizer .bar {
+  width: 4px;
+  height: 40px;           /* fixed — never changes */
+  border-radius: 3px;
+  background: var(--verde-claro);
+  transform: scaleY(0.12);
+  transform-origin: center;
+  transition: background 0.3s;
+}
+.wave-visualizer.playing .bar {
+  animation: wave 1s ease-in-out infinite;
+}
+.wave-visualizer.playing .bar:nth-child(1)  { animation-delay: 0.00s; }
+.wave-visualizer.playing .bar:nth-child(2)  { animation-delay: 0.09s; }
+.wave-visualizer.playing .bar:nth-child(3)  { animation-delay: 0.18s; }
+.wave-visualizer.playing .bar:nth-child(4)  { animation-delay: 0.27s; }
+.wave-visualizer.playing .bar:nth-child(5)  { animation-delay: 0.36s; }
+.wave-visualizer.playing .bar:nth-child(6)  { animation-delay: 0.45s; }
+.wave-visualizer.playing .bar:nth-child(7)  { animation-delay: 0.36s; }
+.wave-visualizer.playing .bar:nth-child(8)  { animation-delay: 0.27s; }
+.wave-visualizer.playing .bar:nth-child(9)  { animation-delay: 0.18s; }
+.wave-visualizer.playing .bar:nth-child(10) { animation-delay: 0.09s; }
+.wave-visualizer.playing .bar:nth-child(11) { animation-delay: 0.00s; }
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.12); }
+  50%       { transform: scaleY(1);    }
+}

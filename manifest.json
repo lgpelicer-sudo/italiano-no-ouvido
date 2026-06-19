@@ -1,0 +1,15 @@
+{
+  "name": "Parla Italiano",
+  "short_name": "Parla!",
+  "description": "Aprenda italiano do A0 ao B2 — caminhando, sem olhar a tela.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a0800",
+  "theme_color": "#8B0000",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["education", "lifestyle"]
+}

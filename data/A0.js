@@ -1,0 +1,82 @@
+/* A0 — Os sons do italiano */
+export const A0_MODULES = [
+  {
+    id: 'a0-m00',
+    nivel: 'A0',
+    emoji: '🔤',
+    nome: 'O som do italiano',
+    descricao: 'Fonética: pronuncie como um nativo desde o início',
+    xpTotal: 80,
+    exercicios: [
+      {
+        tipo: 'intro',
+        audio_pt: 'Bem-vindo ao italiano! Antes de aprender palavras, vamos treinar os sons do italiano. Alguns são parecidos com o português, outros são bem diferentes. Preste atenção e repita em voz alta.',
+      },
+      {
+        tipo: 'vocab',
+        it: 'A, E, O',
+        pt: 'Vogais abertas (mais abertas que no português)',
+        ctx: 'No italiano, as vogais são sempre pronunciadas claramente. Nunca reduzidas como em português.',
+        xp: 5,
+      },
+      {
+        tipo: 'frase',
+        it: 'fatto',
+        pt: 'feito / fato',
+        ctx: 'Consoantes dobradas: há uma pausa real no meio. "fatt-to", não "fato".',
+        xp: 5,
+      },
+      {
+        tipo: 'frase',
+        it: 'pizza',
+        pt: 'pizza',
+        ctx: 'Consoante dupla Z: "pit-tsa". Cada Z é pronunciado separadamente.',
+        xp: 5,
+      },
+      {
+        tipo: 'frase',
+        it: 'Roma',
+        pt: 'Roma',
+        ctx: 'O R italiano é vibrante, rolado na ponta da língua. Diferente do R português.',
+        xp: 5,
+      },
+      {
+        tipo: 'frase',
+        it: 'figlio',
+        pt: 'filho',
+        ctx: '"gli" soa como o LH do português. Boca sorrindo, língua no palato.',
+        xp: 5,
+      },
+      {
+        tipo: 'frase',
+        it: 'gnocchi',
+        pt: 'nhoque',
+        ctx: '"gn" soa como o NH do português. É o mesmo som!',
+        xp: 5,
+      },
+      {
+        tipo: 'frase',
+        it: 'scimmia',
+        pt: 'macaco',
+        ctx: '"sci" soa como SHI. A letra C antes de I ou E fica suave.',
+        xp: 5,
+      },
+      {
+        tipo: 'quiz_oral',
+        pergunta_pt: 'Repita a palavra italiana para "feito"',
+        resposta_it: 'fatto',
+        resposta_pt: 'feito',
+        pausa_segundos: 3,
+        xp: 8,
+      },
+      {
+        tipo: 'quiz_oral',
+        pergunta_pt: 'Repita: "até logo" em italiano',
+        resposta_it: 'Arrivederci',
+        resposta_pt: 'Até logo',
+        pausa_segundos: 4,
+        xp: 8,
+      },
+    ],
+  },
+];

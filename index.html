@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#8B0000">
+  <meta name="description" content="Aprenda italiano do A0 ao B2 caminhando — sem olhar a tela.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Parla!">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Parla Italiano</title>
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/player.css">
+  <link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══════════ SPLASH ═══════════ -->
+  <div id="screen-splash" class="screen active" role="main" aria-label="Carregando">
+    <div class="splash-content">
+      <div class="splash-flag" aria-hidden="true">🇮🇹</div>
+      <h1 class="splash-title">Parla<br>Italiano</h1>
+      <p class="splash-subtitle">Do A0 ao B2 — in movimento</p>
+      <div class="wave-visualizer playing" aria-hidden="true">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div>
+      </div>
+      <p class="splash-loading" aria-live="polite">Carregando…</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ ONBOARDING ═══════════ -->
+  <div id="screen-onboarding" class="screen" role="main" aria-label="Configuração inicial">
+
+    <!-- Step 1: Nome -->
+    <div class="onboarding-step active" id="ob-step-1">
+      <div class="ob-header">
+        <div class="ob-progress" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso do cadastro">
+          <span style="width:25%"></span>
+        </div>
+        <p class="ob-step-label">1 de 4</p>
+      </div>
+      <div class="ob-body">
+        <div class="ob-emoji" aria-hidden="true">👋</div>
+        <h2>Come posso chiamarti?</h2>
+        <p class="ob-sub">Como posso te chamar?</p>
+        <div class="input-group">
+          <label for="input-nome" class="visually-hidden">Seu nome</label>
+          <input type="text" id="input-nome" placeholder="Seu nome" maxlength="30"
+                 autocomplete="given-name" spellcheck="false">
+        </div>
+      </div>
+      <div class="ob-footer">
+        <button class="btn btn-primary btn-lg" id="btn-ob-nome" disabled>Avanti →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Avatar -->
+    <div class="onboarding-step" id="ob-step-avatar">
+      <div class="ob-header">
+        <div class="ob-progress" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+          <span style="width:40%"></span>
+        </div>
+        <p class="ob-step-label">2 de 5</p>
+      </div>
+      <div class="ob-body">
+        <div class="ob-emoji" aria-hidden="true">🎭</div>
+        <h2>Scegli il tuo personaggio</h2>
+        <p class="ob-sub">Quem vai te acompanhar nessa aventura?</p>
+        <div class="avatar-grid" id="ob-avatar-grid" role="group" aria-label="Escolha seu avatar">
+          <button class="avatar-card" data-avatar="mario" aria-pressed="false">
+            <span class="av-emoji">🍄</span>
+            <strong>Mario</strong>
+            <span>Il Superstar</span>
+          </button>
+          <button class="avatar-card" data-avatar="luigi" aria-pressed="false">
+            <span class="av-emoji">🌿</span>
+            <strong>Luigi</strong>
+            <span>Il Fratello</span>
+          </button>
+          <button class="avatar-card" data-avatar="nonna" aria-pressed="false">
+            <span class="av-emoji">👵</span>
+            <strong>Nonna Sofia</strong>
+            <span>La Saggia</span>
+          </button>
+          <button class="avatar-card" data-avatar="chef" aria-pressed="false">
+            <span class="av-emoji">👨‍🍳</span>
+            <strong>Chef Marco</strong>
+            <span>Il Maestro</span>
+          </button>
+          <button class="avatar-card" data-avatar="leonardo" aria-pressed="false">
+            <span class="av-emoji">🎨</span>
+            <strong>Leonardo</strong>
+            <span>Il Genio</span>
+          </button>
+          <button class="avatar-card" data-avatar="giulietta" aria-pressed="false">
+            <span class="av-emoji">💌</span>
+            <strong>Giulietta</strong>
+            <span>La Romantica</span>
+          </button>
+        </div>
+      </div>
+      <div class="ob-footer">
+        <button class="btn btn-primary btn-lg" id="btn-ob-avatar" disabled>Avanti →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Voz -->
+    <div class="onboarding-step" id="ob-step-2">
+      <div class="ob-header">
+        <div class="ob-progress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+          <span style="width:60%"></span>
+        </div>
+        <p class="ob-step-label">3 de 5</p>
+      </div>
+      <div class="ob-body">
+        <div class="ob-emoji" aria-hidden="true">🎧</div>
+        <h2>Escolha sua voz</h2>
+        <p class="ob-sub">Como prefere ouvir o italiano?</p>
+
+        <div class="voice-options" role="group" aria-label="Opções de motor de voz">
+          <button class="voice-option active" data-engine="browser" aria-pressed="true">
+            <span class="vo-icon" aria-hidden="true">🌐</span>
+            <div class="vo-info">
+              <strong>Voz do Navegador</strong>
+              <span>Gratuita, funciona offline</span>
+            </div>
+            <span class="vo-check" aria-hidden="true">✓</span>
+          </button>
+          <button class="voice-option" data-engine="google" aria-pressed="false">
+            <span class="vo-icon" aria-hidden="true">✨</span>
+            <div class="vo-info">
+              <strong>Google Neural2</strong>
+              <span>Voz italiana natural (precisa de API key)</span>
+            </div>
+            <span class="vo-check" aria-hidden="true">✓</span>
+          </button>
+          <div class="rv-key-group hidden" id="google-key-group">
+            <label for="input-google-key">API Key do Google Cloud</label>
+            <input type="text" id="input-google-key" placeholder="Cole sua API key aqui" spellcheck="false">
+            <a class="rv-link" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">
+              Criar chave de API ↗
+            </a>
+          </div>
+          <button class="voice-option" data-engine="responsivevoice" aria-pressed="false">
+            <span class="vo-icon" aria-hidden="true">☁️</span>
+            <div class="vo-info">
+              <strong>ResponsiveVoice</strong>
+              <span>Online, qualidade razoável (precisa de API key)</span>
+            </div>
+            <span class="vo-check" aria-hidden="true">✓</span>
+          </button>
+          <div class="rv-key-group hidden" id="rv-key-group">
+            <label for="input-rv-key">API Key do ResponsiveVoice</label>
+            <input type="text" id="input-rv-key" placeholder="Cole sua API key aqui" spellcheck="false">
+            <a class="rv-link" href="https://responsivevoice.org/" target="_blank" rel="noopener noreferrer">
+              Criar conta gratuita ↗
+            </a>
+          </div>
+          <button class="voice-option" data-engine="texto" aria-pressed="false">
+            <span class="vo-icon" aria-hidden="true">📖</span>
+            <div class="vo-info">
+              <strong>Só Texto</strong>
+              <span>Sem áudio</span>
+            </div>
+            <span class="vo-check" aria-hidden="true">✓</span>
+          </button>
+        </div>
+
+        <div class="alert alert-warning hidden" id="voice-unavailable-msg" role="alert">
+          <strong>Voz italiana não encontrada.</strong> Instale o pacote de voz italiana no seu sistema, ou escolha ResponsiveVoice / modo texto acima.
+        </div>
+
+        <button class="btn btn-outline btn-sm" id="btn-test-voice" style="align-self:center; margin-top:8px">
+          🔊 Testar voz
+        </button>
+      </div>
+      <div class="ob-footer">
+        <button class="btn btn-primary btn-lg" id="btn-ob-voice">Avanti →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Meta diária -->
+    <div class="onboarding-step" id="ob-step-3">
+      <div class="ob-header">
+        <div class="ob-progress" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+          <span style="width:80%"></span>
+        </div>
+        <p class="ob-step-label">4 de 5</p>
+      </div>
+      <div class="ob-body">
+        <div class="ob-emoji" aria-hidden="true">🎯</div>
+        <h2>Sua meta diária</h2>
+        <p class="ob-sub">Quanto tempo por dia você quer dedicar?</p>
+
+        <div class="goal-options" role="group" aria-label="Meta diária">
+          <button class="goal-option" data-minutos="5" data-ritmo="casual" aria-pressed="false">
+            <span class="go-icon" aria-hidden="true">🐢</span>
+            <div class="go-info">
+              <strong>5 min/dia</strong>
+              <span>Casual</span>
+            </div>
+            <small class="go-prev">B2 em ~3 anos</small>
+          </button>
+          <button class="goal-option active" data-minutos="15" data-ritmo="regular" aria-pressed="true">
+            <span class="go-icon" aria-hidden="true">🚶</span>
+            <div class="go-info">
+              <strong>15 min/dia</strong>
+              <span>Regular — recomendado</span>
+            </div>
+            <small class="go-prev">B2 em ~18 meses</small>
+          </button>
+          <button class="goal-option" data-minutos="30" data-ritmo="intensivo" aria-pressed="false">
+            <span class="go-icon" aria-hidden="true">🏃</span>
+            <div class="go-info">
+              <strong>30 min/dia</strong>
+              <span>Intensivo</span>
+            </div>
+            <small class="go-prev">B2 em ~9 meses</small>
+          </button>
+        </div>
+
+        <p class="meta-preview" id="meta-preview" aria-live="polite">
+          No ritmo regular, você alcança B2 em 18 meses
+        </p>
+      </div>
+      <div class="ob-footer">
+        <button class="btn btn-primary btn-lg" id="btn-ob-meta">Avanti →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Modo padrão -->
+    <div class="onboarding-step" id="ob-step-4">
+      <div class="ob-header">
+        <div class="ob-progress" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+          <span style="width:100%"></span>
+        </div>
+        <p class="ob-step-label">5 de 5</p>
+      </div>
+      <div class="ob-body">
+        <div class="ob-emoji" aria-hidden="true">🎧</div>
+        <h2>Modo de estudo</h2>
+        <p class="ob-sub">Como prefere avançar nos exercícios?</p>
+
+        <div class="mode-options" role="group" aria-label="Modo de estudo">
+          <button class="mode-option" data-modo="manual" aria-pressed="false">
+            <span class="mo-icon" aria-hidden="true">👆</span>
+            <div class="mo-info">
+              <strong>Manual</strong>
+              <span>Você pressiona play em cada exercício</span>
+            </div>
+          </button>
+          <button class="mode-option active" data-modo="auto" aria-pressed="true">
+            <span class="mo-icon" aria-hidden="true">🔄</span>
+            <div class="mo-info">
+              <strong>Automático</strong>
+              <span>Avança sozinho — ideal para caminhar</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="alert alert-warning hidden" id="wakelock-warning" role="alert">
+          <strong>Aviso:</strong> Seu navegador não consegue manter a tela acesa automaticamente. Para não perder o áudio, evite bloquear a tela durante o estudo.
+        </div>
+      </div>
+      <div class="ob-footer">
+        <button class="btn btn-primary btn-lg" id="btn-ob-modo">Comenzar! 🎉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ HOME ═══════════ -->
+  <div id="screen-home" class="screen" role="main" aria-label="Início">
+    <header class="home-header">
+      <div class="home-user">
+        <span class="avatar" aria-hidden="true">🧑</span>
+        <div>
+          <h2 class="home-greeting">Ciao, <span id="home-nome">Estudante</span>!</h2>
+          <span class="streak-badge" id="home-streak" aria-label="Sequência de dias">🔥 0 dias</span>
+        </div>
+      </div>
+      <button class="btn-icon" id="btn-profile" aria-label="Configurações">⚙️</button>
+    </header>
+
+    <main class="home-main">
+      <!-- Continue card -->
+      <section class="continue-card" role="region" aria-label="Continuar estudando">
+        <div class="cc-info">
+          <span class="cc-level" id="cc-level">A0</span>
+          <h3 id="cc-module-name">Carregando…</h3>
+          <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso no módulo">
+            <div class="progress-fill" id="cc-progress" style="width:0%"></div>
+          </div>
+          <span class="cc-progress-text" id="cc-progress-text">0% concluído</span>
+        </div>
+        <button class="btn btn-ouro btn-lg" id="btn-continue" aria-label="Continuar módulo atual">
+          ▶ Continuar
+        </button>
+      </section>
+
+      <!-- Stats do dia -->
+      <section class="stats-row" role="region" aria-label="Estatísticas de hoje">
+        <div class="stat-card">
+          <span class="stat-icon" aria-hidden="true">⚡</span>
+          <span class="stat-value" id="stat-xp">0</span>
+          <span class="stat-label">XP hoje</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon" aria-hidden="true">📖</span>
+          <span class="stat-value" id="stat-palavras">0</span>
+          <span class="stat-label">Palavras</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon" aria-hidden="true">⏱</span>
+          <span class="stat-value" id="stat-minutos">0</span>
+          <span class="stat-label">Minutos</span>
+        </div>
+      </section>
+
+      <!-- Trilha -->
+      <section class="modules-trail" role="region" aria-label="Trilha de módulos">
+        <h3>Trilha de Aprendizado</h3>
+        <div class="trail-container" id="trail-container">
+          <!-- Renderizado por JS -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ═══════════ MÓDULOS ═══════════ -->
+  <div id="screen-modules" class="screen" role="main" aria-label="Todos os módulos">
+    <header class="screen-header">
+      <button class="btn-back" id="btn-modules-back" aria-label="Voltar">←</button>
+      <h2>Módulos</h2>
+    </header>
+    <main class="modules-list" id="modules-list">
+      <!-- Renderizado por JS -->
+    </main>
+  </div>
+
+  <!-- ═══════════ PLAYER ═══════════ -->
+  <div id="screen-player" class="screen" role="main" aria-label="Player de exercícios">
+    <header class="player-header">
+      <button class="btn-back" id="btn-player-back" aria-label="Voltar">←</button>
+      <div class="player-module-info">
+        <span class="player-level-badge" id="player-level">A0</span>
+        <h2 class="player-module-name" id="player-module-name">Módulo</h2>
+      </div>
+      <button class="btn-icon" id="btn-toggle-mode" aria-label="Alternar modo automático/manual" aria-pressed="true" title="Modo: Automático">🔄</button>
+    </header>
+
+    <main class="player-main">
+      <!-- Onda -->
+      <div class="wave-visualizer" id="player-wave" aria-hidden="true">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div>
+      </div>
+
+      <!-- Display do exercício -->
+      <div class="exercise-display" id="exercise-display" aria-live="polite">
+        <div class="exercise-type-badge" id="ex-type-badge">📝 Vocab</div>
+        <p class="exercise-it" id="ex-it" lang="it">Ciao</p>
+        <p class="exercise-pt" id="ex-pt">Oi / Tchau</p>
+        <div class="exercise-ctx" id="ex-ctx">
+          <span class="ctx-icon" aria-hidden="true">💡</span>
+          <span id="ex-ctx-text"></span>
+        </div>
+        <div class="text-mode-indicator hidden" id="text-mode-indicator" role="status">
+          📖 Modo texto — áudio indisponível
+        </div>
+      </div>
+
+      <!-- Controles -->
+      <div class="player-controls" role="group" aria-label="Controles de reprodução">
+        <button class="ctrl-btn" id="btn-prev" aria-label="Exercício anterior">⏮</button>
+        <button class="ctrl-btn ctrl-btn--primary" id="btn-play" aria-label="Reproduzir">▶</button>
+        <button class="ctrl-btn" id="btn-next" aria-label="Próximo exercício">⏭</button>
+        <button class="ctrl-btn ctrl-btn--sm" id="btn-repeat" aria-label="Repetir exercício" aria-pressed="false">🔁</button>
+        <button class="ctrl-btn ctrl-btn--sm" id="btn-speed"  aria-label="Velocidade da fala">🐢</button>
+      </div>
+
+      <!-- Barra de progresso -->
+      <div class="player-progress-wrap">
+        <div class="player-progress-bar" role="progressbar" aria-label="Progresso no módulo" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          <div class="player-progress-fill" id="player-progress-fill" style="width:0%"></div>
+        </div>
+        <span class="player-progress-text" id="player-progress-text" aria-live="polite">1 / 1</span>
+      </div>
+
+      <!-- Lista de exercícios -->
+      <div class="exercise-list" id="exercise-list" role="list" aria-label="Exercícios do módulo">
+        <!-- Renderizado por JS -->
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════ VOCABULÁRIO ═══════════ -->
+  <div id="screen-vocabulary" class="screen" role="main" aria-label="Vocabulário aprendido">
+    <header class="screen-header">
+      <h2>Vocabulário</h2>
+      <span id="vocab-count" class="badge">0 palavras</span>
+    </header>
+    <main class="vocab-list" id="vocab-list">
+      <!-- Renderizado por JS -->
+    </main>
+  </div>
+
+  <!-- ═══════════ REVISÃO ═══════════ -->
+  <div id="screen-review" class="screen" role="main" aria-label="Revisão espaçada">
+    <header class="screen-header">
+      <h2>Revisão</h2>
+      <span id="review-count" class="badge" aria-live="polite">0 para hoje</span>
+    </header>
+    <main class="review-main" id="review-main">
+      <!-- Renderizado por JS -->
+    </main>
+  </div>
+
+  <!-- ═══════════ PERFIL ═══════════ -->
+  <div id="screen-profile" class="screen" role="main" aria-label="Perfil e configurações">
+    <header class="screen-header">
+      <button class="btn-back" id="btn-profile-back" aria-label="Voltar">←</button>
+      <h2>Perfil</h2>
+    </header>
+    <main class="profile-main">
+      <div class="profile-section">
+        <h3>Sua conta</h3>
+        <div class="profile-field">
+          <label for="profile-nome">Nome</label>
+          <input type="text" id="profile-nome" maxlength="30" autocomplete="given-name">
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>Seu personagem</h3>
+        <div class="avatar-grid" id="profile-avatar-grid" role="group" aria-label="Escolha seu avatar">
+          <button class="avatar-card" data-avatar="mario" aria-pressed="false"><span class="av-emoji">🍄</span><strong>Mario</strong><span>Il Superstar</span></button>
+          <button class="avatar-card" data-avatar="luigi" aria-pressed="false"><span class="av-emoji">🌿</span><strong>Luigi</strong><span>Il Fratello</span></button>
+          <button class="avatar-card" data-avatar="nonna" aria-pressed="false"><span class="av-emoji">👵</span><strong>Nonna Sofia</strong><span>La Saggia</span></button>
+          <button class="avatar-card" data-avatar="chef" aria-pressed="false"><span class="av-emoji">👨‍🍳</span><strong>Chef Marco</strong><span>Il Maestro</span></button>
+          <button class="avatar-card" data-avatar="leonardo" aria-pressed="false"><span class="av-emoji">🎨</span><strong>Leonardo</strong><span>Il Genio</span></button>
+          <button class="avatar-card" data-avatar="giulietta" aria-pressed="false"><span class="av-emoji">💌</span><strong>Giulietta</strong><span>La Romantica</span></button>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>Motor de voz</h3>
+        <div id="profile-voice-options" role="group" aria-label="Motor de voz">
+          <!-- Renderizado por JS -->
+        </div>
+        <div class="profile-field hidden" id="profile-google-key-group">
+          <label for="profile-google-key">API Key do Google Cloud</label>
+          <input type="text" id="profile-google-key" placeholder="Cole sua API key aqui" spellcheck="false">
+        </div>
+        <div class="profile-field hidden" id="profile-rv-key-group">
+          <label for="profile-rv-key">API Key do ResponsiveVoice</label>
+          <input type="text" id="profile-rv-key" placeholder="Cole sua API key aqui" spellcheck="false">
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>Meta diária</h3>
+        <div id="profile-meta-options" role="group" aria-label="Meta diária">
+          <!-- Renderizado por JS -->
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>Modo padrão</h3>
+        <div id="profile-mode-options" role="group" aria-label="Modo de estudo">
+          <!-- Renderizado por JS -->
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>Wake Lock (tela acesa)</h3>
+        <p class="wakelock-status" id="wakelock-status-text">Verificando…</p>
+      </div>
+
+      <div class="profile-section">
+        <button class="btn btn-outline btn-danger" id="btn-reset-progress">
+          Resetar progresso
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════ BOTTOM NAV ═══════════ -->
+  <nav class="bottom-nav" id="bottom-nav" role="navigation" aria-label="Navegação principal" style="display:none">
+    <button class="nav-item active" data-screen="home" aria-label="Início" aria-current="page">
+      <span class="nav-icon" aria-hidden="true">🏠</span>
+      <span class="nav-label">Início</span>
+    </button>
+    <button class="nav-item" data-screen="modules" aria-label="Módulos">
+      <span class="nav-icon" aria-hidden="true">📚</span>
+      <span class="nav-label">Módulos</span>
+    </button>
+    <button class="nav-item" data-screen="vocabulary" aria-label="Vocabulário">
+      <span class="nav-icon" aria-hidden="true">📖</span>
+      <span class="nav-label">Vocabulário</span>
+    </button>
+    <button class="nav-item" data-screen="review" aria-label="Revisão">
+      <span class="nav-icon" aria-hidden="true">🔁</span>
+      <span class="nav-label">Revisão</span>
+      <span class="nav-badge hidden" id="review-nav-badge" aria-label="Itens para revisar">0</span>
+    </button>
+    <button class="nav-item" data-screen="profile" aria-label="Perfil">
+      <span class="nav-icon" aria-hidden="true">👤</span>
+      <span class="nav-label">Perfil</span>
+    </button>
+  </nav>
+
+  <!-- Toast -->
+  <div class="toast hidden" id="toast" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+</div><!-- #app -->
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
