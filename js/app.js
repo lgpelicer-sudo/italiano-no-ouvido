@@ -26,6 +26,7 @@ for (const mod of ALL_MODULES) {
   const insertAt = mod.exercicios.findIndex(ex => ex.tipo === 'quiz' || ex.tipo === 'quiz_oral');
   mod.exercicios.splice(insertAt >= 0 ? insertAt : mod.exercicios.length, 0, {
     tipo: 'pratica', frases: PRATICA[mod.id], xp: 10,
+    ptFirst: mod.nivel === 'A0',
   });
 }
 

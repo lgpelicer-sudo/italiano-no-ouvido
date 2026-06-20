@@ -260,7 +260,7 @@ export class Player {
 
     } else if (tipo === 'pratica') {
       this._renderPratica(ex);
-      this._playPraticaFrases(ex.frases || [], 0, () => onDone(ex.xp || 10));
+      this._playPraticaFrases(ex.frases || [], 0, () => onDone(ex.xp || 10), ex.ptFirst || false);
 
     } else if (tipo === 'formal_vs_informal') {
       this._renderFormalVsInformal(ex);
@@ -400,18 +400,21 @@ export class Player {
 
   _renderPratica(ex) {
     if (!this._els.exDisplay) return;
+    const ptFirst = ex.ptFirst || false;
     this._els.exDisplay.innerHTML = `
       <div class="exercise-type-badge">🗣 Frases em uso</div>
       <div class="pratica-lista">
         ${(ex.frases || []).map((f, i) => `
           <div class="pratica-item" id="pratica-item-${i}">
-            <p class="pratica-it" lang="it">${f.it}</p>
-            <p class="pratica-pt">${f.pt}</p>
+            ${ptFirst
+              ? `<p class="pratica-pt">${f.pt}</p><p class="pratica-it" lang="it">${f.it}</p>`
+              : `<p class="pratica-it" lang="it">${f.it}</p><p class="pratica-pt">${f.pt}</p>`
+            }
           </div>`).join('')}
       </div>`;
   }
 
-  _playPraticaFrases(frases, idx, onComplete) {
+  _playPraticaFrases(frases, idx, onComplete, ptFirst = false) {
     if (idx >= frases.length) { onComplete(); return; }
     const container = this._els.exDisplay;
     if (container) {
@@ -422,13 +425,16 @@ export class Player {
       active?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
     const frase = frases[idx];
-    this.voice.speak(frase.it, 'it-IT', () => {
-      setTimeout(() => {
-        this.voice.speak(frase.pt, 'pt-BR', () => {
-          setTimeout(() => this._playPraticaFrases(frases, idx + 1, onComplete), 500);
-        });
-      }, 350);
-    });
+    const next = () => setTimeout(() => this._playPraticaFrases(frases, idx + 1, onComplete, ptFirst), 500);
+    if (ptFirst) {
+      this.voice.speak(frase.pt, 'pt-BR', () => {
+        setTimeout(() => this.voice.speak(frase.it, 'it-IT', next), 350);
+      });
+    } else {
+      this.voice.speak(frase.it, 'it-IT', () => {
+        setTimeout(() => this.voice.speak(frase.pt, 'pt-BR', next), 350);
+      });
+    }
   }
 
   _renderFormalVsInformal(ex) {

@@ -6,12 +6,12 @@
 
 export const PRATICA = {
 
-  /* ── A0 ── */
+  /* ── A0 — ptFirst: true (explicação em PT, italiano pronuncia) ── */
   'a0-m00': [
-    { it: 'Come si pronuncia "gnocchi"?',       pt: 'Como se pronuncia "gnocchi"?' },
-    { it: '"Gli" si legge come "lhi" in portoghese.', pt: '"Gli" lê-se como "lhi" em português.' },
-    { it: 'La "c" davanti a "i" e "e" è dolce: "ciao"!', pt: 'O "c" antes de "i" e "e" é suave: "ciao"!' },
-    { it: 'Ogni lettera si pronuncia sempre uguale.', pt: 'Cada letra sempre se pronuncia igual.' },
+    { pt: 'Como se pronuncia "gnocchi"?',                    it: 'Gnocchi! Gnocchi, gnocchi.' },
+    { pt: '"Gli" soa como "lhi" em português. Ouça:',        it: 'Gli, aglio, figlio, moglie.' },
+    { pt: 'O "c" antes de "i" e "e" é suave. Ouça:',        it: 'Ciao, cibo, cena, cinema.' },
+    { pt: 'Cada letra em italiano sempre soa igual. Ouça:',  it: 'Pizza, pasta, caffè, gelato.' },
   ],
 
   /* ── A1 ── */
