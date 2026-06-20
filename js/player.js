@@ -54,6 +54,8 @@ export class Player {
     this._textMode    = false;  // true when no Italian voice available
     this._startTime   = null;
 
+    this._audioOnly = false;
+
     // DOM refs (set by bindUI)
     this._els = {};
   }
@@ -81,14 +83,16 @@ export class Player {
       exerciseList: $('exercise-list'),
       levelBadge:   $('player-level'),
       moduleName:   $('player-module-name'),
+      btnAudioOnly: $('btn-audio-only'),
     };
 
-    this._els.btnPlay.addEventListener('click',   () => this._playing ? this.pause() : this.play());
-    this._els.btnPrev.addEventListener('click',   () => this.prev());
-    this._els.btnNext.addEventListener('click',   () => this.next());
-    this._els.btnRepeat.addEventListener('click', () => this.toggleRepeat());
-    this._els.btnSpeed.addEventListener('click',  () => this.cycleSpeed());
-    this._els.btnToggleMode?.addEventListener('click', () => this.toggleAutoMode());
+    this._els.btnPlay.addEventListener('click',      () => this._playing ? this.pause() : this.play());
+    this._els.btnPrev.addEventListener('click',      () => this.prev());
+    this._els.btnNext.addEventListener('click',      () => this.next());
+    this._els.btnRepeat.addEventListener('click',    () => this.toggleRepeat());
+    this._els.btnSpeed.addEventListener('click',     () => this.cycleSpeed());
+    this._els.btnToggleMode?.addEventListener('click',    () => this.toggleAutoMode());
+    this._els.btnAudioOnly?.addEventListener('click',     () => this.toggleAudioOnly());
 
     // Listen for voice-unavailable events from VoiceEngine
     document.addEventListener('voice-unavailable', () => {
@@ -109,7 +113,9 @@ export class Player {
 
     const nivel = mod.nivel || 'A1';
     const preset = SPEED_PRESETS[nivel] || SPEED_PRESETS.A1;
-    this.voice.setRate(preset.rate);
+    const savedRate = parseFloat(localStorage.getItem('speech_rate'));
+    this.voice.setRate(!isNaN(savedRate) ? savedRate : preset.rate);
+    this._updateSpeedBtn();
 
     if (this._els.levelBadge) this._els.levelBadge.textContent = nivel;
     if (this._els.moduleName)  this._els.moduleName.textContent  = mod.nome;
@@ -193,12 +199,29 @@ export class Player {
   }
 
   cycleSpeed() {
-    const rates = [0.7, 0.85, 1.0, 1.15];
-    const cur = rates.indexOf(this.voice.rate);
-    const next = rates[(cur + 1) % rates.length];
-    this.voice.setRate(next);
-    const labels = ['🐢', '🚶', '🏃', '⚡'];
-    if (this._els.btnSpeed) this._els.btnSpeed.textContent = labels[(cur + 1) % labels.length];
+    const rates  = [0.7, 0.85, 1.0, 1.15, 1.3];
+    const curIdx = rates.findIndex(r => Math.abs(r - this.voice.rate) < 0.05);
+    const nextIdx = (curIdx + 1) % rates.length;
+    this.voice.setRate(rates[nextIdx]);
+    localStorage.setItem('speech_rate', rates[nextIdx]);
+    this._updateSpeedBtn();
+  }
+
+  _updateSpeedBtn() {
+    const rates  = [0.7, 0.85, 1.0, 1.15, 1.3];
+    const labels = ['🐢 0.7×', '🚶 0.85×', '🏃 1×', '⚡ 1.15×', '🚀 1.3×'];
+    const idx = rates.findIndex(r => Math.abs(r - this.voice.rate) < 0.05);
+    if (this._els.btnSpeed) this._els.btnSpeed.textContent = labels[idx >= 0 ? idx : 2];
+  }
+
+  toggleAudioOnly() {
+    this._audioOnly = !this._audioOnly;
+    this._els.exDisplay?.classList.toggle('audio-only', this._audioOnly);
+    if (this._els.btnAudioOnly) {
+      this._els.btnAudioOnly.setAttribute('aria-pressed', String(this._audioOnly));
+      this._els.btnAudioOnly.title = this._audioOnly ? 'Modo: Só Áudio ativo' : 'Modo: Só Áudio';
+      this._els.btnAudioOnly.style.opacity = this._audioOnly ? '1' : '0.45';
+    }
   }
 
   /* ── Exercise playback ── */

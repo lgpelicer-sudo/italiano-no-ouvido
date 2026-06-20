@@ -359,3 +359,31 @@
 .ex-item-text  { font-size: 0.88rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ex-item-type  { font-size: 0.74rem; color: var(--cinza-texto); margin-top: 1px; }
 .ex-item-xp    { font-size: 0.74rem; color: var(--rosso); font-weight: 600; flex-shrink: 0; }
+
+/* ── Botão de velocidade (texto) ── */
+#btn-speed { font-size: 0.72rem; min-width: 60px; }
+
+/* ── Player header btns ── */
+.player-header-btns { display: flex; gap: 0.25rem; align-items: center; }
+
+/* ── Modo só áudio ── */
+.exercise-display.audio-only .exercise-it,
+.exercise-display.audio-only .exercise-pt,
+.exercise-display.audio-only .exercise-ctx,
+.exercise-display.audio-only .dialogo-it,
+.exercise-display.audio-only .dialogo-pt,
+.exercise-display.audio-only .pratica-it,
+.exercise-display.audio-only .pratica-pt,
+.exercise-display.audio-only .quiz-pergunta,
+.exercise-display.audio-only .fvi-it,
+.exercise-display.audio-only .fvi-pt { opacity: 0 !important; user-select: none; pointer-events: none; }
+
+.exercise-display.audio-only::after {
+  content: '🎧 Modo só áudio — ouça e tente entender';
+  display: block;
+  text-align: center;
+  color: var(--cinza-texto);
+  font-size: 0.8rem;
+  margin-top: 0.75rem;
+  font-style: italic;
+}

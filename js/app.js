@@ -71,6 +71,7 @@ function navigate(screenId) {
   if (screenId === 'modules')    renderModules();
   if (screenId === 'vocabulary') renderVocabulary();
   if (screenId === 'review')     renderReview();
+  if (screenId === 'stats')      renderStats();
   if (screenId === 'profile')    renderProfile();
 }
 
@@ -290,6 +291,69 @@ function renderReview() {
   const badge     = document.getElementById('review-count');
   if (!container) return;
   review.render(container, badge, () => refreshHome());
+}
+
+/* ════════════════════════════════════════════
+   STATS
+   ════════════════════════════════════════════ */
+function renderStats() {
+  const main = document.getElementById('stats-main');
+  if (!main) return;
+
+  const s = progress.state;
+  const totalModulos = ALL_MODULES.length;
+  const concluidos = Object.values(s.modulosStatus || {}).filter(m => m.status === 'concluido').length;
+  const palavras   = s.palavrasAprendidas?.length || 0;
+  const minHoje    = s.statsHoje?.minutos || 0;
+  const palHoje    = s.statsHoje?.palavras || 0;
+
+  // Contagem por nível
+  const nivelMap = { A0: [], A1: [], A2: [], B1: [], B2: [] };
+  ALL_MODULES.forEach(m => { if (nivelMap[m.nivel]) nivelMap[m.nivel].push(m.id); });
+
+  const levelBars = Object.entries(nivelMap).map(([nivel, ids]) => {
+    const done = ids.filter(id => (s.modulosStatus?.[id]?.status === 'concluido')).length;
+    const pct  = ids.length ? Math.round((done / ids.length) * 100) : 0;
+    return `
+      <div class="level-bar-row">
+        <span class="level-bar-label">${nivel}</span>
+        <div class="level-bar-track"><div class="level-bar-fill" style="width:${pct}%"></div></div>
+        <span class="level-bar-pct">${done}/${ids.length}</span>
+      </div>`;
+  }).join('');
+
+  main.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value">${s.xpTotal || 0}</div>
+        <div class="stat-label">XP Total</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value">${s.streak || 0}</div>
+        <div class="stat-label">Dias seguidos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">${concluidos}<span style="font-size:.6em;opacity:.7"> / ${totalModulos}</span></div>
+        <div class="stat-label">Módulos concluídos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📝</div>
+        <div class="stat-value">${palavras}</div>
+        <div class="stat-label">Palavras aprendidas</div>
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <p class="stats-section-title">Progresso por nível</p>
+      ${levelBars}
+    </div>
+
+    <div class="stats-today">
+      Hoje: <strong>${s.xpHoje || 0} XP</strong> · <strong>${palHoje} palavras</strong> · <strong>${minHoje} min</strong>
+    </div>`;
 }
 
 /* ════════════════════════════════════════════

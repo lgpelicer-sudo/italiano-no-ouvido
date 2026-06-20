@@ -353,7 +353,10 @@
         <span class="player-level-badge" id="player-level">A0</span>
         <h2 class="player-module-name" id="player-module-name">Módulo</h2>
       </div>
-      <button class="btn-icon" id="btn-toggle-mode" aria-label="Alternar modo automático/manual" aria-pressed="true" title="Modo: Automático">🔄</button>
+      <div class="player-header-btns">
+        <button class="btn-icon" id="btn-audio-only" aria-label="Modo só áudio" aria-pressed="false" title="Modo: Só Áudio" style="opacity:.45">🎧</button>
+        <button class="btn-icon" id="btn-toggle-mode" aria-label="Alternar modo automático/manual" aria-pressed="true" title="Modo: Automático">🔄</button>
+      </div>
     </header>
 
     <main class="player-main">
@@ -421,6 +424,16 @@
       <span id="review-count" class="badge" aria-live="polite">0 para hoje</span>
     </header>
     <main class="review-main" id="review-main">
+      <!-- Renderizado por JS -->
+    </main>
+  </div>
+
+  <!-- ═══════════ ESTATÍSTICAS ═══════════ -->
+  <div id="screen-stats" class="screen" role="main" aria-label="Estatísticas de progresso">
+    <header class="screen-header">
+      <h2>Meu progresso</h2>
+    </header>
+    <main class="stats-main" id="stats-main">
       <!-- Renderizado por JS -->
     </main>
   </div>
@@ -512,6 +525,10 @@
       <span class="nav-icon" aria-hidden="true">🔁</span>
       <span class="nav-label">Revisão</span>
       <span class="nav-badge hidden" id="review-nav-badge" aria-label="Itens para revisar">0</span>
+    </button>
+    <button class="nav-item" data-screen="stats" aria-label="Progresso">
+      <span class="nav-icon" aria-hidden="true">📊</span>
+      <span class="nav-label">Progresso</span>
     </button>
     <button class="nav-item" data-screen="profile" aria-label="Perfil">
       <span class="nav-icon" aria-hidden="true">👤</span>
