@@ -128,6 +128,10 @@ export class Player {
     this._renderCurrentExercise();
     this._updateProgress();
     this._updatePlayBtn();
+
+    if (this._autoMode) {
+      setTimeout(() => this.play(), 800);
+    }
   }
 
   /* ── Playback controls ── */
@@ -194,6 +198,8 @@ export class Player {
 
   toggleAutoMode() {
     this._autoMode = !this._autoMode;
+    this.progress.state.modoPadrao = this._autoMode ? 'auto' : 'manual';
+    this.progress.save();
     this._updateToggleModeBtn();
     if (this._autoMode && !this._playing) this.play();
   }
@@ -267,11 +273,27 @@ export class Player {
     } else if (tipo === 'quiz') {
       const dispEl = this._els.exDisplay;
       if (!dispEl) return;
-      dispEl.innerHTML = '';
-      this.quiz.renderQuiz(ex, dispEl, {
-        onCorrect: (xp) => onDone(xp),
-        onWrong:   ()   => onDone(0),
-      });
+      if (this._autoMode) {
+        // Auto mode: speak question → pause → speak correct answer → advance
+        const correta = ex.opcoes?.[ex.correta] || ex.it || '';
+        this.voice.speak(ex.pergunta_pt, 'pt-BR', () => {
+          setTimeout(() => {
+            this.voice.speak(correta, 'it-IT', () => {
+              if (ex.pt) {
+                setTimeout(() => this.voice.speak(ex.pt, 'pt-BR', () => onDone(ex.xp || 10)), 300);
+              } else {
+                onDone(ex.xp || 10);
+              }
+            });
+          }, 3000);
+        });
+      } else {
+        dispEl.innerHTML = '';
+        this.quiz.renderQuiz(ex, dispEl, {
+          onCorrect: (xp) => onDone(xp),
+          onWrong:   ()   => onDone(0),
+        });
+      }
 
     } else if (tipo === 'quiz_oral') {
       const dispEl = this._els.exDisplay;
@@ -373,8 +395,9 @@ export class Player {
       this._renderDialogo(ex);
 
     } else if (tipo === 'quiz') {
-      this._els.exDisplay.innerHTML = `<p class="quiz-pergunta">${ex.pergunta_pt}</p>
-        <p style="color:var(--cinza-texto);font-size:.85rem">Pressione ▶ para iniciar</p>`;
+      this._els.exDisplay.innerHTML = `<div class="exercise-type-badge">❓ Quiz</div>
+        <p class="quiz-pergunta">${ex.pergunta_pt}</p>
+        <p style="color:var(--cinza-texto);font-size:.85rem">${this._autoMode ? '🎧 Ouça a pergunta e a resposta' : 'Pressione ▶ para iniciar'}</p>`;
 
     } else if (tipo === 'quiz_oral') {
       this._els.exDisplay.innerHTML = `<div class="exercise-type-badge">🗣 Quiz oral</div>
