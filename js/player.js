@@ -25,6 +25,11 @@ const TYPE_ICONS = {
   quiz:               '❓',
   quiz_oral:          '🗣',
   formal_vs_informal: '🎩',
+  hook:               '🎬',
+  ascolto:            '🎧',
+  osserva:            '🔍',
+  cultura:            '☕',
+  connessione:        '🔗',
 };
 
 const TYPE_LABELS = {
@@ -36,6 +41,11 @@ const TYPE_LABELS = {
   quiz:               'Quiz',
   quiz_oral:          'Quiz oral',
   formal_vs_informal: 'Formal × Informal',
+  hook:               'Situação',
+  ascolto:            'Ouça primeiro',
+  osserva:            'Observe',
+  cultura:            'Caffè culturale',
+  connessione:        'Conexão final',
 };
 
 export class Player {
@@ -315,6 +325,55 @@ export class Player {
       if (ex.formal?.it)   lines.push({ text: ex.formal.it,   lang: 'it-IT' });
       this._playLineSequence(lines, 0, () => onDone(ex.xp || 15));
 
+    } else if (tipo === 'hook') {
+      this._renderHook(ex);
+      const lines = [];
+      if (ex.pt) lines.push({ text: ex.pt, lang: 'pt-BR' });
+      if (ex.it) lines.push({ text: ex.it, lang: 'it-IT' });
+      this._playLineSequence(lines, 0, () => onDone(ex.xp || 0));
+
+    } else if (tipo === 'ascolto') {
+      // Phase 1: Italian only — blind listening
+      this._renderAscolto(ex, false);
+      this.voice.speak('Ouça o diálogo. Tente entender pelo contexto.', 'pt-BR', () => {
+        this._playDialogoLinesItalianOnly(ex.linhas, 0, () => {
+          // Phase 2: reveal full text, play again normally
+          setTimeout(() => {
+            this._renderAscolto(ex, true);
+            this._playDialogoLines(ex.linhas, 0, () => onDone(ex.xp || 20));
+          }, 1000);
+        });
+      });
+
+    } else if (tipo === 'osserva') {
+      this._renderOsserva(ex, false);
+      const exemploLines = (ex.exemplos || []).map(e => ({ text: e, lang: 'it-IT' }));
+      this._playLineSequence(exemploLines, 0, () => {
+        setTimeout(() => {
+          this.voice.speak(ex.pergunta, 'pt-BR', () => {
+            setTimeout(() => {
+              this._renderOsserva(ex, true);
+              this.voice.speak(ex.regra, 'pt-BR', () => onDone(ex.xp || 8));
+            }, this._autoMode ? 3000 : 500);
+          });
+        }, 500);
+      });
+
+    } else if (tipo === 'cultura') {
+      this._renderCultura(ex);
+      const lines = [];
+      if (ex.texto_pt) lines.push({ text: ex.texto_pt, lang: 'pt-BR' });
+      if (ex.it)       lines.push({ text: ex.it, lang: 'it-IT' });
+      this._playLineSequence(lines, 0, () => onDone(ex.xp || 5));
+
+    } else if (tipo === 'connessione') {
+      this._renderConnessione(ex);
+      const lines = [];
+      if (ex.pt_intro) lines.push({ text: ex.pt_intro, lang: 'pt-BR' });
+      if (ex.it)       lines.push({ text: ex.it, lang: 'it-IT' });
+      if (ex.pt)       lines.push({ text: ex.pt, lang: 'pt-BR' });
+      this._playLineSequence(lines, 0, () => onDone(ex.xp || 10));
+
     } else {
       // Unknown type — just advance
       onDone(0);
@@ -409,6 +468,21 @@ export class Player {
 
     } else if (tipo === 'formal_vs_informal') {
       this._renderFormalVsInformal(ex);
+
+    } else if (tipo === 'hook') {
+      this._renderHook(ex);
+
+    } else if (tipo === 'ascolto') {
+      this._renderAscolto(ex, false);
+
+    } else if (tipo === 'osserva') {
+      this._renderOsserva(ex, false);
+
+    } else if (tipo === 'cultura') {
+      this._renderCultura(ex);
+
+    } else if (tipo === 'connessione') {
+      this._renderConnessione(ex);
     }
 
     // Update media session for lock screen
@@ -501,6 +575,85 @@ export class Player {
         </div>
       </div>
       ${ex.regra ? `<p class="fvi-rule">📌 ${ex.regra}</p>` : ''}`;
+  }
+
+  _renderHook(ex) {
+    if (!this._els.exDisplay) return;
+    this._els.exDisplay.innerHTML = `
+      <div class="exercise-type-badge">🎬 Situação</div>
+      <p class="hook-situacao">${ex.pt || ''}</p>
+      ${ex.it ? `<p class="hook-it" lang="it">${ex.it}</p>` : ''}`;
+  }
+
+  _renderAscolto(ex, revealed) {
+    if (!this._els.exDisplay) return;
+    const badge = `<div class="exercise-type-badge">🎧 ${revealed ? 'Ouça novamente' : 'Ouça primeiro — sem tradução'}</div>`;
+    if (!revealed) {
+      this._els.exDisplay.innerHTML = `${badge}
+        <p class="ascolto-hint">Tente entender pelo contexto. A tradução aparece depois.</p>
+        <div class="dialogo-container ascolto-blind">
+          ${(ex.linhas || []).map((l, i) => `
+            <div class="dialogo-linha" id="dialogo-linha-${i}">
+              <div class="dialogo-personagem">${l.personagem}</div>
+              <div class="dialogo-texto">
+                <p class="dialogo-it" lang="it">${l.it}</p>
+              </div>
+            </div>`).join('')}
+        </div>`;
+    } else {
+      this._els.exDisplay.innerHTML = `${badge}
+        <div class="dialogo-container">
+          ${(ex.linhas || []).map((l, i) => `
+            <div class="dialogo-linha" id="dialogo-linha-${i}">
+              <div class="dialogo-personagem">${l.personagem}</div>
+              <div class="dialogo-texto">
+                <p class="dialogo-it" lang="it">${l.it}</p>
+                <p class="dialogo-pt">${l.pt}</p>
+              </div>
+            </div>`).join('')}
+        </div>`;
+    }
+  }
+
+  _renderOsserva(ex, revealed) {
+    if (!this._els.exDisplay) return;
+    this._els.exDisplay.innerHTML = `
+      <div class="exercise-type-badge">🔍 Observe</div>
+      <div class="osserva-exemplos">
+        ${(ex.exemplos || []).map(e => `<p class="osserva-ex" lang="it">${e}</p>`).join('')}
+      </div>
+      <p class="osserva-pergunta">${ex.pergunta || ''}</p>
+      <div class="osserva-regra ${revealed ? '' : 'hidden'}" id="osserva-regra">
+        📌 ${ex.regra || ''}
+      </div>`;
+  }
+
+  _renderCultura(ex) {
+    if (!this._els.exDisplay) return;
+    this._els.exDisplay.innerHTML = `
+      <div class="exercise-type-badge">☕ Caffè culturale</div>
+      ${ex.titulo ? `<p class="cultura-titulo">${ex.titulo}</p>` : ''}
+      <p class="cultura-texto">${ex.texto_pt || ''}</p>
+      ${ex.it ? `<p class="cultura-it" lang="it">${ex.it}</p>` : ''}`;
+  }
+
+  _renderConnessione(ex) {
+    if (!this._els.exDisplay) return;
+    this._els.exDisplay.innerHTML = `
+      <div class="exercise-type-badge">🔗 Conexão final</div>
+      ${ex.pt_intro ? `<p class="connessione-intro">${ex.pt_intro}</p>` : ''}
+      <p class="connessione-it" lang="it">${ex.it || ''}</p>
+      <p class="connessione-pt">${ex.pt || ''}</p>
+      ${ex.ctx ? `<div class="exercise-ctx"><span class="ctx-icon" aria-hidden="true">💡</span><span>${ex.ctx}</span></div>` : ''}`;
+  }
+
+  _playDialogoLinesItalianOnly(linhas, idx, onComplete) {
+    if (idx >= linhas.length) { onComplete(); return; }
+    const linha = linhas[idx];
+    this._highlightDialogoLine(idx);
+    this.voice.speak(linha.it, 'it-IT', () => {
+      setTimeout(() => this._playDialogoLinesItalianOnly(linhas, idx + 1, onComplete), 400);
+    });
   }
 
   _renderExerciseList() {
