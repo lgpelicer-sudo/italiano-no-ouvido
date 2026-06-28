@@ -686,7 +686,11 @@ document.addEventListener('module-complete', e => {
     }
   }
 
-  setTimeout(() => navigate('home'), 1500);
+  if (progress.state.modoPadrao === 'auto' && next) {
+    setTimeout(() => openModule(next), 2000);
+  } else {
+    setTimeout(() => navigate('home'), 1500);
+  }
 });
 
 /* ════════════════════════════════════════════
