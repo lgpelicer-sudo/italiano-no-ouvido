@@ -140,7 +140,7 @@ export class Player {
     this._updatePlayBtn();
 
     if (this._autoMode) {
-      setTimeout(() => this.play(), 800);
+      setTimeout(() => { if (!this._playing) this.play(); }, 800);
     }
   }
 
