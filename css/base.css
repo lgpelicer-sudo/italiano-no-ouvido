@@ -3,26 +3,26 @@
    ============================================ */
 
 :root {
-  --verde:        #8B0000;
-  --verde-claro:  #B00000;
-  --rosso:        #C9A84C;
-  --rosso-claro:  #D4B860;
-  --branco:       #ffffff;
-  --cinza-texto:  #8a7560;
-  --cinza-borda:  #2a1800;
-  --escuro:       #0a0800;
-  --escuro2:      #120900;
-  --erro:         #e84040;
-  --sucesso:      #8B0000;
+  --verde:        #1a5fff;
+  --verde-claro:  #4d88ff;
+  --rosso:        #7b00ff;
+  --rosso-claro:  #9933ff;
+  --branco:       #d0dcff;
+  --cinza-texto:  #4a5a8a;
+  --cinza-borda:  #16163a;
+  --escuro:       #07070f;
+  --escuro2:      #0f0f1e;
+  --erro:         #ff3366;
+  --sucesso:      #1a5fff;
 
   --radius-sm:    8px;
   --radius-md:    14px;
   --radius-lg:    20px;
   --radius-pill:  999px;
 
-  --shadow-sm:    0 2px 8px rgba(0,0,0,.5);
-  --shadow-md:    0 4px 20px rgba(0,0,0,.7);
-  --shadow-rosso: 0 4px 20px rgba(201,168,76,.35);
+  --shadow-sm:    0 2px 8px rgba(0,0,0,.7);
+  --shadow-md:    0 4px 24px rgba(0,0,0,.85);
+  --shadow-rosso: 0 4px 20px rgba(26,95,255,.4);
 
   --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
   --transition: all 0.2s ease;
@@ -122,7 +122,7 @@ a { color: var(--rosso-claro); }
   bottom: calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
-  background: #252545;
+  background: #0f0f28;
   color: var(--branco);
   border: 1px solid rgba(255,255,255,.12);
   border-radius: var(--radius-md);
@@ -135,9 +135,9 @@ a { color: var(--rosso-claro); }
   animation: toastIn 0.25s ease;
   pointer-events: none;
 }
-.toast.toast-success { border-color: var(--verde-claro); background: #3d0000; }
-.toast.toast-error   { border-color: var(--erro);        background: #3d1010; }
-.toast.toast-warn    { border-color: var(--rosso);       background: #2d2000; }
+.toast.toast-success { border-color: var(--verde-claro); background: #00103d; }
+.toast.toast-error   { border-color: var(--erro);        background: #200015; }
+.toast.toast-warn    { border-color: var(--rosso);       background: #150033; }
 
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(-50%) translateY(8px); }

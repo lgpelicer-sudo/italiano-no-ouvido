@@ -1,6 +1,6 @@
 // Bump CACHE_VERSION whenever static files or module data change
 // to force cache replacement on user devices.
-const CACHE_VERSION = 'v12';
+const CACHE_VERSION = 'v13';
 const CACHE_NAME = `italiano-no-ouvido-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [

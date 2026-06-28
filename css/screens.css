@@ -4,7 +4,7 @@
 
 /* ===== SPLASH ===== */
 #screen-splash {
-  background: linear-gradient(160deg, #1a0500 0%, var(--escuro) 100%);
+  background: linear-gradient(160deg, #070018 0%, var(--escuro) 100%);
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -114,7 +114,7 @@
 .goal-option.active,
 .mode-option.active {
   border-color: var(--verde-claro);
-  background: rgba(139,0,0,.15);
+  background: rgba(26,95,255,.15);
 }
 .vo-icon, .go-icon, .mo-icon { font-size: 1.5rem; flex-shrink: 0; }
 .vo-info, .go-info, .mo-info { flex: 1; min-width: 0; }
@@ -126,8 +126,8 @@
 
 .rv-key-group {
   padding: var(--sp-md);
-  background: rgba(201,168,76,.05);
-  border: 1px solid rgba(201,168,76,.2);
+  background: rgba(123,0,255,.05);
+  border: 1px solid rgba(123,0,255,.2);
   border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
@@ -141,7 +141,7 @@
   font-size: 0.88rem;
   color: var(--rosso);
   padding: 12px;
-  background: rgba(201,168,76,.07);
+  background: rgba(123,0,255,.07);
   border-radius: var(--radius-md);
 }
 
@@ -176,7 +176,7 @@
 }
 
 .continue-card {
-  background: linear-gradient(135deg, var(--verde) 0%, #3d0000 100%);
+  background: linear-gradient(135deg, var(--verde) 0%, #0a0a3d 100%);
   border-radius: var(--radius-lg);
   padding: var(--sp-lg);
   display: flex;
@@ -245,7 +245,7 @@
 }
 .trail-module:not(:disabled):hover  { background: rgba(255,255,255,.08); }
 .trail-module:disabled               { opacity: 0.35; cursor: not-allowed; }
-.trail-module.status-atual           { border-color: var(--verde-claro); background: rgba(139,0,0,.1); }
+.trail-module.status-atual           { border-color: var(--verde-claro); background: rgba(26,95,255,.1); }
 .trail-module.status-concluido       { opacity: 0.65; }
 
 .trail-status-icon { font-size: 1.2rem; width: 28px; text-align: center; flex-shrink: 0; }
@@ -357,8 +357,8 @@
   border-radius: var(--radius-md);
   line-height: 1.4;
 }
-.wakelock-status.supported   { color: #7feabc; }
-.wakelock-status.unsupported { color: #f0d880; }
+.wakelock-status.supported   { color: #7feaff; }
+.wakelock-status.unsupported { color: #cc99ff; }
 
 .profile-save-row { display: flex; justify-content: flex-end; }
 
@@ -387,7 +387,7 @@
 .avatar-card:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); }
 .avatar-card[aria-pressed="true"] {
   border-color: var(--verde-claro);
-  background: rgba(139,0,0,.15);
+  background: rgba(26,95,255,.15);
   box-shadow: 0 0 0 1px var(--verde-claro);
 }
 .av-emoji { font-size: 2rem; line-height: 1; }
