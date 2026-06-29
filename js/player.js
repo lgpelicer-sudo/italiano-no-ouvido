@@ -109,6 +109,18 @@ export class Player {
       this._textMode = true;
       this._els.textMode?.classList.remove('hidden');
     });
+
+    // Resume playback when returning from lock screen (speechSynthesis gets suspended)
+    document.addEventListener('app-resume', () => {
+      if (this._playing) {
+        setTimeout(() => {
+          if (this._playing) {
+            this.voice.cancel();
+            this._playCurrentExercise();
+          }
+        }, 400);
+      }
+    });
   }
 
   /* ── Load a module ── */
@@ -283,8 +295,8 @@ export class Player {
     } else if (tipo === 'quiz') {
       const dispEl = this._els.exDisplay;
       if (!dispEl) return;
-      if (this._autoMode) {
-        // Auto mode: speak question → pause → speak correct answer → advance
+      if (this._autoMode || this._audioOnly) {
+        // Hands-free: speak question → pause → speak correct answer → advance
         const correta = ex.opcoes?.[ex.correta] || ex.it || '';
         this.voice.speak(ex.pergunta_pt, 'pt-BR', () => {
           setTimeout(() => {
@@ -298,10 +310,15 @@ export class Player {
           }, 3000);
         });
       } else {
-        dispEl.innerHTML = '';
-        this.quiz.renderQuiz(ex, dispEl, {
-          onCorrect: (xp) => onDone(xp),
-          onWrong:   ()   => onDone(0),
+        // Manual mode: speak the question, then show interactive buttons
+        this.voice.speak(ex.pergunta_pt, 'pt-BR', () => {
+          if (dispEl) {
+            dispEl.innerHTML = '';
+            this.quiz.renderQuiz(ex, dispEl, {
+              onCorrect: (xp) => onDone(xp),
+              onWrong:   ()   => onDone(0),
+            });
+          }
         });
       }
 

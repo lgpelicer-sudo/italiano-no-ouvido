@@ -86,9 +86,10 @@ export class WakeLockManager {
   }
 
   async _onVisibilityChange() {
-    // Browser releases Wake Lock when tab hides; re-request on return if still active.
-    if (document.visibilityState === 'visible' && this._active && !this._wakeLock) {
-      await this.request();
+    if (document.visibilityState === 'visible' && this._active) {
+      if (!this._wakeLock) await this.request();
+      // speechSynthesis stops when screen locks; notify player to resume
+      document.dispatchEvent(new CustomEvent('app-resume'));
     }
   }
 
@@ -98,6 +99,10 @@ export class WakeLockManager {
       title:  exercicioIt ?? 'Italiano no Ouvido',
       artist: moduleNome  ?? 'Italiano no Ouvido',
       album:  'Italiano no Ouvido',
+      artwork: [
+        { src: './icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+        { src: './icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+      ],
     });
     const { onPlay, onPause, onNext, onPrev } = handlers;
     if (onPlay)  navigator.mediaSession.setActionHandler('play',          onPlay);

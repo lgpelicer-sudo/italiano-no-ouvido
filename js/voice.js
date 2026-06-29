@@ -105,20 +105,6 @@ export class VoiceEngine {
     return promise;
   }
 
-  _setupMediaSession() {
-    if (!('mediaSession' in navigator)) return;
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title:  'Parla Italiano',
-      artist: 'A0 → B2',
-      artwork: [
-        { src: './icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-        { src: './icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-      ],
-    });
-    navigator.mediaSession.setActionHandler('play',  () => this._audio.play().catch(() => {}));
-    navigator.mediaSession.setActionHandler('pause', () => this._audio.pause());
-  }
-
   async _speakGoogle(text, lang, callback) {
     const myGen = this._gen;
     const stale = () => myGen !== this._gen;
@@ -141,7 +127,6 @@ export class VoiceEngine {
         }
       };
 
-      this._setupMediaSession();
       await this._audio.play();
     } catch (err) {
       console.warn('Google TTS:', err.message);
