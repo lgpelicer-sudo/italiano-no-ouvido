@@ -297,12 +297,19 @@ export class Player {
       if (!dispEl) return;
       if (this._autoMode || this._audioOnly) {
         // Hands-free: speak question → pause → speak correct answer → advance
+        // Capture generation so raw setTimeouts are dropped if cancelled mid-pause
+        const gen = this.voice.generation;
+        const stale = () => this.voice.generation !== gen;
         const correta = ex.opcoes?.[ex.correta] || ex.it || '';
         this.voice.speak(ex.pergunta_pt, 'pt-BR', () => {
           setTimeout(() => {
+            if (stale()) return;
             this.voice.speak(correta, 'it-IT', () => {
               if (ex.pt) {
-                setTimeout(() => this.voice.speak(ex.pt, 'pt-BR', () => onDone(ex.xp || 10)), 300);
+                setTimeout(() => {
+                  if (stale()) return;
+                  this.voice.speak(ex.pt, 'pt-BR', () => onDone(ex.xp || 10));
+                }, 300);
               } else {
                 onDone(ex.xp || 10);
               }
@@ -471,9 +478,21 @@ export class Player {
       this._renderDialogo(ex);
 
     } else if (tipo === 'quiz') {
-      this._els.exDisplay.innerHTML = `<div class="exercise-type-badge">❓ Quiz</div>
-        <p class="quiz-pergunta">${ex.pergunta_pt}</p>
-        <p style="color:var(--cinza-texto);font-size:.85rem">${this._autoMode ? '🎧 Ouça a pergunta e a resposta' : 'Pressione ▶ para iniciar'}</p>`;
+      if (this._autoMode || this._audioOnly) {
+        // Show options visually (no buttons) so user can follow along while listening
+        const opts = (ex.opcoes || []).map((op, i) => `
+          <div class="quiz-option quiz-option--display" style="pointer-events:none;opacity:0.75">
+            ${op}
+          </div>`).join('');
+        this._els.exDisplay.innerHTML = `<div class="exercise-type-badge">❓ Quiz</div>
+          <p class="quiz-pergunta">${ex.pergunta_pt}</p>
+          <div class="quiz-options">${opts}</div>
+          <p style="color:var(--cinza-texto);font-size:.82rem;text-align:center">🎧 Ouça a pergunta e a resposta</p>`;
+      } else {
+        this._els.exDisplay.innerHTML = `<div class="exercise-type-badge">❓ Quiz</div>
+          <p class="quiz-pergunta">${ex.pergunta_pt}</p>
+          <p style="color:var(--cinza-texto);font-size:.85rem">Pressione ▶ para iniciar</p>`;
+      }
 
     } else if (tipo === 'quiz_oral') {
       this._els.exDisplay.innerHTML = `<div class="exercise-type-badge">🗣 Quiz oral</div>

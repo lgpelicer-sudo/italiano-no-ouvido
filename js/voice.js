@@ -246,4 +246,6 @@ export class VoiceEngine {
   setRate(rate) { this.rate = rate; }
 
   setEngine(engine) { this.engine = engine; }
+
+  get generation() { return this._gen; }
 }
