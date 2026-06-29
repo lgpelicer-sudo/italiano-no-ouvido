@@ -1,6 +1,6 @@
 // Bump CACHE_VERSION whenever static files or module data change
 // to force cache replacement on user devices.
-const CACHE_VERSION = 'v13';
+const CACHE_VERSION = 'v14';
 const CACHE_NAME = `italiano-no-ouvido-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
@@ -30,7 +30,14 @@ const PRECACHE_URLS = [
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
+    caches.open(CACHE_NAME).then(cache =>
+      Promise.all(
+        PRECACHE_URLS.map(url =>
+          fetch(new Request(url, { cache: 'reload' }))
+            .then(res => res.ok ? cache.put(url, res) : Promise.reject(url))
+        )
+      )
+    )
   );
   self.skipWaiting();
 });
